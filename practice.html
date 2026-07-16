@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="" style="margin: 50px;">
+        <h3>upload file</h3>
+        <button class="submit-btn">
+            upload
+        </button>
+
+
+        <input type="file">
+    </div>
+
+
+    <script>
+
+        let date = new Date();
+        // addEventListener
+
+        let btn = document.querySelector('.submit-btn');
+        console.log(btn);
+
+        btn.addEventListener('click', (e) => {
+
+            console.log('clicked');
+            e.preventDefault();
+
+            const uploadTime = new Date();
+
+            const now = new Date();
+            const diffMs = now - uploadTime; // milliseconds difference
+
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            const diffHours = Math.floor(diffMinutes / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            let timeAgo;
+
+            if (diffSeconds < 60) {
+                timeAgo = `${diffSeconds} sec ago`;
+            } else if (diffMinutes < 60) {
+                timeAgo = `${diffMinutes} min ago`;
+            } else if (diffHours < 24) {
+                timeAgo = `${diffHours} hr ago`;
+            } else {
+                timeAgo = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            }
+
+            console.log('🕒 Uploaded ' + timeAgo);
+
+
+
+        })
+
+
+        // usage:
+
+        // console.log(timeAgo(new Date())); // "2h ago"
+
+
+        // let currentTime = date.toLocaleTimeString();
+        // let uploadingTime = date.toLocaleTimeString();
+
+        // let timeOfUpload = currentTime - uploadingTime;
+
+        // console.log('uploading time'+timeOfUpload);
+
+        // let date = new Date();
+        // console.log(date.toLocaleDateString());
+        // console.log(date.toLocaleTimeString());
+        // console.log(date.toLocaleString());
+
+        /*
+            multer.diskstrorage({
+                destination :  "./uploads",
+                filename: function (req, file, cb){
+                    cb(
+                        null,
+                        file.feildname + ' ' + Date.now() + path.extname(file.orginalname)
+                    )
+                }
+            })
+        
+        */
+
+
+        let arr = [1, 2, 3, 6, 7, 99];
+        arr.splice(2, 1, 5666);
+
+        console.log(arr);
+        const fruits = ["Banana", "Orange", "Apple", "Mango"];
+        fruits.splice(2, 2, "Lemon", "Kiwi");
+        console.log(fruits);
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
