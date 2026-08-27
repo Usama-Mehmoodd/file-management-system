@@ -9,7 +9,7 @@ export default function MyModal({ show, onHide, details, getAllFiles}) {
 
     console.log('delete the file through:'+ fileID);
 
-    const url = `${process.env.PROD_URL}/files/delete-file`;
+    const url = `${import.meta.env.PROD_URL}/files/delete-file`;
     
     // return;
 
