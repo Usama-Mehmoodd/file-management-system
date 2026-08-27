@@ -4,11 +4,14 @@ import { Button, Col, Form, Row, Table, ButtonGroup } from 'react-bootstrap';
 import { getTimeDifference } from '../helper';
 import MyModal from './components/MyModal';
 import EditModal from './components/EditModal';
+import Loader from './components/Loader';
+
 
 function App() {
 
   const [filesData, setFilesData] = useState([]);
   const [filterType, setFilterType] = useState('all');
+  const [loading, setLoading] = useState(false);
 
   // State for our new filter feature
   // sorting management
@@ -47,7 +50,9 @@ function App() {
     try {
 
 
-      const url = 'http://localhost:5000/files';
+      // const url = 'http://localhost:5000/files';
+      const url = `${process.env.BASE_URL}/files`;
+      setLoading(true);
       const response = await fetch(url);
       const resData = await response.json();
 
@@ -57,6 +62,9 @@ function App() {
 
     } catch (error) {
       console.error('Error fetching files: ' + error);
+    }
+    finally{
+      setLoading(false);
     }
   }
 
@@ -71,7 +79,7 @@ function App() {
 
       const uploadTime = new Date(file.uploadTime);
       const timeAgo = getTimeDifference(uploadTime);
-      console.log('timeAgo', timeAgo);
+      // console.log('timeAgo', timeAgo);
 
       //  old and new file object with upload time
       return {
@@ -104,8 +112,10 @@ function App() {
 
     formData.append('file', file);
 
+
     try {
-      const response = await fetch('http://localhost:5000/files/upload-file', {
+      setLoading(true);
+      const response = await fetch(`${process.env.BASE_URL}/files/upload-file`, {
         method: 'POST',
         body: formData,
       });
@@ -118,8 +128,9 @@ function App() {
       }
     } catch (error) {
       console.error('Error uploading file:', error);
+    }finally {
+      setLoading(false);
     }
-
     getAllFiles();
   }
 
@@ -234,7 +245,8 @@ function App() {
   };
 
   const processedFiles = getSortedFiles(getFilteredFiles());
-  console.log(processedFiles);
+  // console.log(processedFiles);
+
 
 
   return (
@@ -310,6 +322,8 @@ function App() {
         </Row>
 
         {/* Files Table */}
+
+      {loading ? <Loader /> : (
         <div className="table-responsive">
           <Table striped bordered hover align="middle">
             <thead className="table-dark">
@@ -324,6 +338,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
+              
               {processedFiles.length > 0 ? (
                 processedFiles.map((v, i) => (
                   <tr key={v._id || i}>
@@ -360,6 +375,9 @@ function App() {
             </tbody>
           </Table>
         </div>
+      )}
+        
+        
 
         {/* Modals */}
         {showModal && (

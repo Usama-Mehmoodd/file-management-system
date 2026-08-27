@@ -23,7 +23,7 @@ export default function EditModal({ show, onHide, details, getAllFiles }) {
 
   async function confirmEdit() {
 
-    const url = 'http://localhost:5000/files/update-file';
+    const url = `${process.env.BASE_URL}/files/update-file`;
 
     // console.log(file);
     // console.log('confirm edit file:: '+action);
@@ -100,7 +100,7 @@ export default function EditModal({ show, onHide, details, getAllFiles }) {
       console.log(file.name);
       
       
-      const url = 'http://localhost:5000/files/replace-file';
+      const url = `${process.env.BASE_URL}/files/replace-file`;
     
      try {
         
