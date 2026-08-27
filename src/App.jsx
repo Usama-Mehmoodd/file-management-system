@@ -51,7 +51,7 @@ function App() {
 
 
       // const url = 'http://localhost:5000/files';
-      const url = `${process.env.BASE_URL}/files`;
+      const url = `${process.env.PROD_URL}/files`;
       setLoading(true);
       const response = await fetch(url);
       const resData = await response.json();
@@ -115,7 +115,7 @@ function App() {
 
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.BASE_URL}/files/upload-file`, {
+      const response = await fetch(`${process.env.PROD_URL}/files/upload-file`, {
         method: 'POST',
         body: formData,
       });
