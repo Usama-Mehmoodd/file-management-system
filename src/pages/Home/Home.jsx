@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Table, ButtonGroup } from 'react-bootstrap';
-import { getTimeDifference } from '../../helper';
-import MyModal from '../components/MyModal';
-import EditModal from '../components/EditModal';
-import Loader from '../components/Loader';
-import api from '../utilities/axios';
+import { getTimeDifference } from '../../../helper';
+import MyModal from '../../components/MyModal';
+import EditModal from '../../components/EditModal';
+import Loader from '../../components/Loader';
+import api from '../../utilities/axios';
 
 
 function Home() {
@@ -25,6 +25,11 @@ function Home() {
     mimetype: '',
     fileID: '',
   });
+
+
+  // status for file uploading 
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState('idle'); // idle | uploading | done | error
 
 
   useEffect(() => {
@@ -51,24 +56,24 @@ function Home() {
 
 
       // const url = 'http://localhost:5000/files';
-    //   const url = `${import.meta.env.VITE_PROD_URL}/files`;
+      //   const url = `${import.meta.env.VITE_PROD_URL}/files`;
       setLoading(true);
       // const response = await fetch(url);
       // const resData = await response.json();
-      
-      const response = await api.get('/files'); 
-      console.log(response.data);
-      
 
+      const response = await api.get('/files');
+      console.log(response.data);
+
+      const resData = response.data; // Assuming the server returns an array of files in the 'data' property
 
       // helper file returnns the time difference 
-      const transformedData = calculateUploadedTime(response.data);
+      const transformedData = calculateUploadedTime(resData.data);
       setFilesData(transformedData);
 
     } catch (error) {
       console.error('Error fetching files: ' + error);
     }
-    finally{
+    finally {
       setLoading(false);
     }
   }
@@ -123,12 +128,27 @@ function Home() {
     try {
       setLoading(true);
       //   const response = await fetch(`${import.meta.env.VITE_PROD_URL}/files/upload-file`, {
-        //   const response = await fetch(`http://localhost:5000/files/upload-file`, {
-        //   method: 'POST',
-        //   body: formData,
-        // });
+      //   const response = await fetch(`http://localhost:5000/files/upload-file`, {
+      //   method: 'POST',
+      //   body: formData,
+      // });
 
-        const response = await api.post('/files/upload-file', formData);
+      setStatus('uploading');
+      setProgress(0);
+
+      const response = await api.post('/files/upload-file', formData, {
+        onUploadProgress: (e) => {
+          if (e.total) {
+            const percentage = Math.round((e.loaded * 100) / e.total);
+            setProgress(percentage);
+          }
+        },
+      });
+
+      console.log('File uploaded successfully:', response.data);
+
+      setProgress(100);
+      setStatus('success');
 
       // if (response.ok) {
       //   const result = await response.json();
@@ -136,10 +156,15 @@ function Home() {
       // } else {
       //   console.error('Upload failed');
       // }
+
     } catch (error) {
       console.error('Error uploading file:', error);
-    }finally {
+      setStatus('error');
+    } finally {
       setLoading(false);
+      setTimeout(() => {
+        setStatus('idle');
+      }, 1500);
     }
     getAllFiles();
   }
@@ -331,63 +356,116 @@ function Home() {
           </Col>
         </Row>
 
+
+        {status === 'uploading' && (
+          <div className="mb-4">
+
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <span className="fw-semibold">
+                <i className="bi bi-cloud-upload me-2"></i>
+                Uploading file...
+              </span>
+
+              <span className="fw-bold">
+                {progress}%
+              </span>
+            </div>
+
+            <div
+              className="progress"
+              style={{ height: '20px' }}
+            >
+              <div
+                className="progress-bar progress-bar-striped progress-bar-animated"
+                role="progressbar"
+                style={{ width: `${progress}%` }}
+                aria-valuenow={progress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                {progress}%
+              </div>
+            </div>
+
+          </div>
+        )}
+
+
+        {/* Upload Success */}
+        {status === 'success' && (
+          <div className="alert alert-success d-flex align-items-center mb-4">
+            <i className="bi bi-check-circle-fill me-2"></i>
+            File uploaded successfully!
+          </div>
+        )}
+
+
+        {/* Upload Error */}
+        {status === 'error' && (
+          <div className="alert alert-danger d-flex align-items-center mb-4">
+            <i className="bi bi-exclamation-circle-fill me-2"></i>
+            File upload failed. Please try again.
+          </div>
+        )}
+
+
         {/* Files Table */}
 
-      {loading ? <Loader /> : (
-        <div className="table-responsive">
-          <Table striped bordered hover align="middle">
-            <thead className="table-dark">
-              <tr>
-                <th>File Name</th>
-                <th>Content Type</th>
-                <th>Size</th>
-                <th>Uploaded</th>
-                <th className="text-center" style={{ width: '200px' }}>
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              
-              {processedFiles.length > 0 ? (
-                processedFiles.map((v, i) => (
-                  <tr key={v._id || i}>
-                    <td>{v.fileName}</td>
-                    <td>{v.contentType ? v.contentType : v.mimetype}</td>
-                    <td>{v.size || 'N/A'}</td>
-                    {/* yee hai bug uploadtime ka e miss tha */}
-                    <td>{v.uploaded ? v.uploaded : v.uploadTime}</td>
-                    <td>
-                      <div className="d-flex justify-content-center gap-2">
-                        <button
-                          onClick={() => handleEdit(v)}
-                          className="btn btn-sm btn-outline-primary"
-                        >
-                          <i className="bi bi-pencil me-1"></i> Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(v)}
-                          className="btn btn-sm btn-outline-danger"
-                        >
-                          <i className="bi bi-trash3 me-1"></i> Delete
-                        </button>
-                      </div>
+        {loading ? <Loader /> : (
+          <div className="table-responsive">
+            <Table striped bordered hover align="middle">
+              <thead className="table-dark">
+                <tr>
+                  <th>File Name</th>
+                  <th>Content Type</th>
+                  <th>Size</th>
+                  <th>Uploaded</th>
+                  <th className="text-center" style={{ width: '200px' }}>
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {processedFiles.length > 0 ? (
+                  processedFiles.map((v, i) => (
+                    <tr key={v._id || i}>
+                      <td>{v.fileName}</td>
+                      <td>{v.contentType ? v.contentType : v.mimetype}</td>
+                      <td>{v.size || 'N/A'}</td>
+                      {/* yee hai bug uploadtime ka e miss tha */}
+                      <td>{v.uploaded ? v.uploaded : v.uploadTime}</td>
+                      <td>
+                        <div className="d-flex justify-content-center gap-2">
+                          <button
+                            onClick={() => handleEdit(v)}
+                            className="btn btn-sm btn-outline-primary"
+                          >
+                            <i className="bi bi-pencil me-1"></i> Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(v)}
+                            className="btn btn-sm btn-outline-danger"
+                          >
+                            <i className="bi bi-trash3 me-1"></i> Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center py-4 text-muted">
+                      No files found for the selected category.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center py-4 text-muted">
-                    No files found for the selected category.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </div>
-      )}
-        
-        
+                )}
+              </tbody>
+            </Table>
+          </div>
+        )}
+
+
 
         {/* Modals */}
         {showModal && (

@@ -1,5 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import api from "../utilities/axios";
+
 
 export default function MyModal({ show, onHide, details, getAllFiles}) {
 
@@ -10,24 +12,28 @@ export default function MyModal({ show, onHide, details, getAllFiles}) {
     console.log('delete the file through:'+ fileID);
 
     // const url = `${import.meta.env.VITE_PROD_URL}/files/delete-file`;
-    const url = `http://localhost:5000/files/delete-file`;
+    // const url = `http://localhost:5000/files/delete-file`;
     
     // return;
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fileID }),
+      // const response = await fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({ fileID }),
 
 
-      });
-      const resData = await response.json();
+      // });
+
+      const response = await api.post('/files/delete-file', { fileID });
+
+
+      // const resData = await response.json();
       // i want to hide modal
       onHide();
-      console.log(resData);
+      console.log(response);
 
       getAllFiles();
 
