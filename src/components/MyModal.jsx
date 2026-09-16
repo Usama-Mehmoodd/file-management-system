@@ -9,7 +9,8 @@ export default function MyModal({ show, onHide, details, getAllFiles}) {
 
     console.log('delete the file through:'+ fileID);
 
-    const url = `${import.meta.env.VITE_PROD_URL}/files/delete-file`;
+    // const url = `${import.meta.env.VITE_PROD_URL}/files/delete-file`;
+    const url = `http://localhost:5000/files/delete-file`;
     
     // return;
 

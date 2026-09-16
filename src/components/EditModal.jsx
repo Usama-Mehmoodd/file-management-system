@@ -23,7 +23,8 @@ export default function EditModal({ show, onHide, details, getAllFiles }) {
 
   async function confirmEdit() {
 
-    const url = `${import.meta.env.VITE_PROD_URL}/files/update-file`;
+    // const url = `${import.meta.env.VITE_PROD_URL}/files/update-file`;
+    const url = `http://localhost:5000/files/update-file`;
 
     // console.log(file);
     // console.log('confirm edit file:: '+action);
