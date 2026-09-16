@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
+import api from '../utilities/axios';
+
 
 export default function EditModal({ show, onHide, details, getAllFiles }) {
 
@@ -24,7 +26,7 @@ export default function EditModal({ show, onHide, details, getAllFiles }) {
   async function confirmEdit() {
 
     // const url = `${import.meta.env.VITE_PROD_URL}/files/update-file`;
-    const url = `http://localhost:5000/files/update-file`;
+    // const url = `http://localhost:5000/files/update-file`;
 
     // console.log(file);
     // console.log('confirm edit file:: '+action);
@@ -33,16 +35,19 @@ export default function EditModal({ show, onHide, details, getAllFiles }) {
       
     try {
 
-      const response = await fetch(url,{
-        method: 'POST',
-        headers:{
-           'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(fileEditData),
-      });
+      // const response = await fetch(url,{
+      //   method: 'POST',
+      //   headers:{
+      //      'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(fileEditData),
+      // });
 
-      const resData = await response.json();
-      console.log(resData);
+      // const resData = await response.json();
+
+      const response = await api.post('/files/update-file', fileEditData);
+      
+      console.log(response);
       
       onHide();
       getAllFiles();
@@ -101,7 +106,7 @@ export default function EditModal({ show, onHide, details, getAllFiles }) {
       console.log(file.name);
       
       
-      const url = `${import.meta.env.VITE_PROD_URL}/files/replace-file`;
+      // const url = `${import.meta.env.VITE_PROD_URL}/files/replace-file`;
     
      try {
         
@@ -112,13 +117,16 @@ export default function EditModal({ show, onHide, details, getAllFiles }) {
         
         formData.append('fileId', fileEditData.fileId);
 
-        const response = await fetch(url,{
-          method: 'POST',
-          body: formData
-        });
+        // const response = await fetch(url,{
+        //   method: 'POST',
+        //   body: formData
+        // });
 
-        const result = await response.json();
-        console.log(result);
+        // const result = await response.json();
+        // console.log(result);
+
+        const response = await api.post('/files/replace-file', formData);
+        console.log(response);
         
         onHide();
         getAllFiles();
