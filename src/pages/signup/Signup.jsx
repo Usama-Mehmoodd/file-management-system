@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import api from '../../utilities/axios';
 import { useAuth } from '../../context/AuthContext';
 
+import './signup.css';
+
 export default function Signup() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
