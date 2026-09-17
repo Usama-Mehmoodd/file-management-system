@@ -6,14 +6,17 @@ import { useAuth } from '../../context/AuthContext';
 
 // css
 
-import './Signin.css';
+import './signin.css';
 
 export default function Signin() {
+
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+
   const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
