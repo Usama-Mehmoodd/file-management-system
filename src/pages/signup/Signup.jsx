@@ -26,6 +26,7 @@ export default function Signup() {
       login(res.data.user);
       navigate('/');
     } catch (err) {
+      console.error(err);
       setError(err.response?.data?.message || 'Signup failed. Try again.');
     } finally {
       setLoading(false);

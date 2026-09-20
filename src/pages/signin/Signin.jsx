@@ -32,6 +32,7 @@ export default function Signin() {
       login(res.data.user);
       navigate('/');
     } catch (err) {
+      console.error(err);
       setError(err.response?.data?.message || 'Invalid email or password.');
     } finally {
       setLoading(false);
