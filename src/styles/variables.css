@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Design tokens — single source of truth for the whole dashboard.
+   Change a value here and it updates everywhere.
+   ========================================================================== */
+
+:root {
+  /* Brand */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+
+  /* Sidebar (stays dark in both themes) */
+  --sidebar-bg: #0f172a;
+  --sidebar-hover: #1e293b;
+  --sidebar-active: #2563eb;
+  --sidebar-text: #94a3b8;
+  --sidebar-text-active: #ffffff;
+  --sidebar-border: #1e293b;
+
+  /* Surfaces */
+  --page-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --surface-hover: #f8fafc;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  /* Lines */
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  /* Status */
+  --success: #22c55e;
+  --success-light: #f0fdf4;
+  --warning: #f59e0b;
+  --warning-light: #fffbeb;
+  --danger: #ef4444;
+  --danger-light: #fef2f2;
+  --info: #3b82f6;
+  --info-light: #eff6ff;
+
+  /* File type accents (used in phase 3) */
+  --type-pdf: #ef4444;
+  --type-pdf-bg: #fef2f2;
+  --type-doc: #2563eb;
+  --type-doc-bg: #eff6ff;
+  --type-xls: #22c55e;
+  --type-xls-bg: #f0fdf4;
+  --type-img: #a855f7;
+  --type-img-bg: #faf5ff;
+  --type-zip: #f59e0b;
+  --type-zip-bg: #fffbeb;
+  --type-other: #64748b;
+  --type-other-bg: #f1f5f9;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+
+  /* Shadows — soft, never black */
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 20px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1);
+
+  /* Spacing scale — stick to these, no random 17px */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Layout */
+  --sidebar-width: 256px;
+  --header-height: 68px;
+  --content-max: 1600px;
+
+  --transition: all 0.2s ease;
+
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+/* ==========================================================================
+   Dark mode — only the surface/text/border tokens flip.
+   Components never need to know which theme is active.
+   ========================================================================== */
+
+[data-theme="dark"] {
+  --primary-light: #1e3a5f;
+
+  --sidebar-bg: #0b1120; /* slightly darker than the content area */
+  --sidebar-hover: #1e293b;
+  --sidebar-border: #1e293b;
+
+  --page-bg: #0f172a;
+  --card-bg: #1e293b;
+  --surface-hover: #273549;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --border: #334155;
+  --border-light: #273549;
+
+  --success-light: #14321f;
+  --warning-light: #3b2c10;
+  --danger-light: #3b1a1a;
+  --info-light: #1e3a5f;
+
+  --type-pdf-bg: #3b1a1a;
+  --type-doc-bg: #1e3a5f;
+  --type-xls-bg: #14321f;
+  --type-img-bg: #2e1d45;
+  --type-zip-bg: #3b2c10;
+  --type-other-bg: #273549;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
