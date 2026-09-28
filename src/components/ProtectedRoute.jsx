@@ -17,5 +17,7 @@ export default function ProtectedRoute({ children }) {
     return <Navigate to="/signin" replace />;
   }
 
+  // children will return all the protected childs like home dashboard mainLayout
+
   return children;
 }
